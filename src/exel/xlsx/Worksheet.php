@@ -117,7 +117,7 @@ class Worksheet {
 			}
 			return array($index-1, $row-1);
 		}
-		throw new Exception("Invalid cell index");
+		throw new \Exception("Invalid cell index");
 	}
 	
 	protected function parseCellValue($cell) {

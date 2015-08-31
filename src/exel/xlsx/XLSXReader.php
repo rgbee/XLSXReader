@@ -29,13 +29,13 @@ use socialist\exel\xlsx\Worksheet;
  */
 
 class XLSXReader {
-	protected $sheets = array();
-	protected $sharedstrings = array();
+	protected $sheets = [];
+	protected $sharedstrings = [];
 	protected $sheetInfo;
 	protected $zip;
-	public $config = array(
+	public $config = [
 		'removeTrailingRows' => true
-	);
+	];
 	
 	// XML schemas
 	const SCHEMA_OFFICEDOCUMENT  =  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument';
@@ -44,14 +44,14 @@ class XLSXReader {
 	const SCHEMA_SHAREDSTRINGS =  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings';
 	const SCHEMA_WORKSHEETRELATION =  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
 
-	public function __construct($filePath, $config = array()) {
+	public function __construct($filePath, $config = []) {
 		$this->config = array_merge($this->config, $config);
-		$this->zip = new ZipArchive();
+		$this->zip = new \ZipArchive();
 		$status = $this->zip->open($filePath);
 		if($status === true) {
 			$this->parse();
 		} else {
-			throw new Exception("Failed to open $filePath with zip error code: $status");
+			throw new \Exception("Failed to open $filePath with zip error code: $status");
 		}
 	}
 
@@ -59,7 +59,7 @@ class XLSXReader {
 	protected function getEntryData($name) {
 		$data = $this->zip->getFromName($name);
 		if($data === false) {
-			throw new Exception("File $name does not exist in the Excel file");
+			throw new \Exception("File $name does not exist in the Excel file");
 		} else {
 			return $data;
 		}
@@ -135,7 +135,7 @@ class XLSXReader {
 		if(is_numeric($sheet)) {
 			$sheet = $this->getSheetNameById($sheet);
 		} elseif(!is_string($sheet)) {
-			throw new Exception("Sheet must be a string or a sheet Id");
+			throw new \Exception("Sheet must be a string or a sheet Id");
 		}
 		if(!array_key_exists($sheet, $this->sheets)) {
 			$this->sheets[$sheet] = new Worksheet($this->getSheetXML($sheet), $sheet, $this);
@@ -150,7 +150,7 @@ class XLSXReader {
 				return $sheetName;
 			}
 		}
-		throw new Exception("Sheet ID $sheetId does not exist in the Excel file");
+		throw new \Exception("Sheet ID $sheetId does not exist in the Excel file");
 	}
 
 	protected function getSheetXML($name) {
