@@ -62,6 +62,7 @@ Get the data from a row of the sheet:
 
 ```php
 $data = $exel->getSheetRowData($numRow, $sheetIndex);
+```
 
 
 ## What it doesn't do ##
